@@ -1,8 +1,8 @@
 from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL
-
+from wtforms.validators import DataRequired, AnyOf, URL , Regexp
+import re
 class ShowForm(Form):
     artist_id = StringField(
         'artist_id'
@@ -15,7 +15,7 @@ class ShowForm(Form):
         validators=[DataRequired()],
         default= datetime.today()
     )
-
+        
 class VenueForm(Form):
     name = StringField(
         'name', validators=[DataRequired()]
@@ -83,7 +83,7 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone'
+        'phone', validators=[Regexp(r'^[0-9\-\+]+$')]
     )
     image_link = StringField(
         'image_link'
@@ -125,6 +125,7 @@ class VenueForm(Form):
     seeking_description = StringField(
         'seeking_description'
     )
+
 
 
 
@@ -192,8 +193,7 @@ class ArtistForm(Form):
         ]
     )
     phone = StringField(
-        # TODO implement validation logic for state
-        'phone'
+        'phone' , validators=[DataRequired()]
     )
     image_link = StringField(
         'image_link'
@@ -223,9 +223,9 @@ class ArtistForm(Form):
         ]
      )
     facebook_link = StringField(
-        # TODO implement enum restriction
-        'facebook_link', validators=[URL()]
-     )
+        'facebook_link', validators=[DataRequired(), Regexp('(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?', 
+        message="The correct format for the facebook link was not correct")]
+    )
 
     website_link = StringField(
         'website_link'
@@ -236,4 +236,5 @@ class ArtistForm(Form):
     seeking_description = StringField(
             'seeking_description'
      )
+
 
